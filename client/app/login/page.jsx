@@ -38,11 +38,15 @@ function Page() {
         password,
       });
 
+      //Handle successful login response
+
       if (response.data?.accessToken) {
         localStorage.setItem("token", response.data.accessToken);
         router.push("/dashboard");
       }
     } catch (error) {
+
+      //Handle login error
       setError(
         error.response?.data?.message ||
           "An unexpected error occurred. Please try again."

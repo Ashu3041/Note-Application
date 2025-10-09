@@ -4,12 +4,16 @@ import PasswordInput from "@/components/Passwordinput";
 import { validateEmail } from "@/utils/helper";
 import Link from "next/link";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import axiosInstance from "@/utils/axiosInstance";
 
 function Page() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+
+  const router = useRouter()
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -35,16 +39,25 @@ function Page() {
 
     // Signup API Call 
       try {
-      const response = await axiosInstance.post("/login", {
-        email,
-        password,
+      const response = await axiosInstance.post("/create-account", {
+        fullName:name,
+        email:email,
+        password:password,
       });
 
-      if (response.data?.accessToken) {
-        localStorage.setItem("token", response.data.accessToken);
+      //Handle successful registration response
+
+      if (response.data && response.data.error) {
+          setError(response.data.message)
+          return
+      }
+
+      if(response.data && response.data.accessToken){
+        localStorage.setItem("token",response.data.accessToken);
         router.push("/dashboard");
       }
     } catch (error) {
+      //Handle registration error
       setError(
         error.response?.data?.message ||
           "An unexpected error occurred. Please try again."

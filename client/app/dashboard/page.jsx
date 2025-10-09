@@ -8,6 +8,7 @@ import Modal from "react-modal";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
 import NavBar from "@/components/NavBar";
+import moment from "moment";
 
 
 Modal.setAppElement("body");
@@ -19,10 +20,15 @@ function Page() {
     data: null,
   });
 
+  const [allNotes,setAllNotes] = useState([]);
   const [userInfo,setUserInfo] = useState(null);
   console.log("user data", userInfo)
 
   const router = useRouter();
+
+  const handleEdit = (noteDetails)=>{
+    setOpenAddEditModal({ isShown:true, data: noteDetails, type:"edit" });
+  };
 
   //GET USER INFO
 
@@ -42,7 +48,21 @@ function Page() {
   };
 
 
+  //GET ALL Notes
+  const getAllNotes = async () =>{
+    try{
+      const response = await axiosInstance.get("/get-all-notes");
+
+      if(response.data && response.data.notes){
+        setAllNotes(response.data.notes);
+      }
+    }catch(error){
+      console.log("An Unexpected Error Occured. Please Try Again.")
+    }
+  }
+
   useEffect(()=>{
+    getAllNotes();
     getUserInfo();
     return () => {};
   }, [] );
@@ -53,36 +73,19 @@ function Page() {
       <div className="min-h-screen p-6 bg-yellow-600">
         {/* All notes in one grid */}
         <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <NoteCards
-            title="Meeting a Friend"
-            date="25 Nov"
-            content="The person is very special."
-            tags="#meeting"
-            isPined={true}
-            onEdit={() => {}}
+          {allNotes.map((item,index)=>(
+            <NoteCards
+            key={item._id}
+            title={item.title}
+            date={moment(item.createdOn).format("Do MMM YYYY")}
+            content={item.content}
+            tags={item.tags}
+            isPined={item.isPinned}
+            onEdit={() => handleEdit(item)}
             onDelete={() => {}}
             onPinNote={() => {}}
           />
-          <NoteCards
-            title="Grocery List"
-            date="28 Nov"
-            content="Buy fruits, milk, and snacks."
-            tags="#personal"
-            isPined={true}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            onPinNote={() => {}}
-          />
-          <NoteCards
-            title="Project Meeting"
-            date="30 Nov"
-            content="Discuss timeline and next sprint deliverables."
-            tags="#work"
-            isPined={true}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            onPinNote={() => {}}
-          />
+          ))}
         </div>
       </div>
 
@@ -110,7 +113,12 @@ function Page() {
         contentLabel=""
         className="w-[90%] sm:w-[60%] md:w-[40%] bg-white rounded-md mx-auto mt-20 p-5 overflow-auto"
       >
-        <AddEditNotes />
+        <AddEditNotes   onClose={() => 
+          setOpenAddEditModal({isShown: false, type: "add", data: null})}
+          getAllNotes={getAllNotes}
+          noteData={openAddEditNotes.data}
+          type={openAddEditNotes.type}
+          />
       </Modal>
     </>
   );
