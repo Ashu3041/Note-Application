@@ -2,9 +2,13 @@
 
 import AddEditNotes from "@/components/AddEditNotes";
 import NoteCards from "@/components/NoteCards";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdAdd } from "react-icons/md";
 import Modal from "react-modal";
+import { useRouter } from "next/navigation";
+import axiosInstance from "@/utils/axiosInstance";
+import NavBar from "@/components/NavBar";
+
 
 Modal.setAppElement("body");
 
@@ -15,8 +19,37 @@ function Page() {
     data: null,
   });
 
+  const [userInfo,setUserInfo] = useState(null);
+  console.log("user data", userInfo)
+
+  const router = useRouter();
+
+  //GET USER INFO
+
+  const getUserInfo = async () =>{
+    try{
+      const response = await axiosInstance.get("/get-user");
+      console.log("user", response.user)
+      if (response.data && response.data.user){
+        setUserInfo(response.data.user);
+      }
+    }catch(error){
+      if(error.response.status === 401){
+        localStorage.clear();
+        router.push("/login");
+      }
+    }
+  };
+
+
+  useEffect(()=>{
+    getUserInfo();
+    return () => {};
+  }, [] );
+
   return (
     <>
+      <NavBar userInfo={userInfo} />
       <div className="min-h-screen p-6 bg-yellow-600">
         {/* All notes in one grid */}
         <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

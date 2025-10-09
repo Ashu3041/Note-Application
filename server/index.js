@@ -1,4 +1,4 @@
-require("dotenv").config();
+const dotenv = require("dotenv")
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -9,6 +9,8 @@ const { authenticateToken } = require("./utilities");
 const User = require("./models/user.model");
 const Note = require("./models/note.model");
 const config = require("./config.json");
+
+dotenv.config();
 
 const app = express();
 
@@ -115,6 +117,7 @@ app.post("/login", async (req, res) => {
 
 app.get("/get-user",authenticateToken,async(req,res)=>{
   const user = req.user;
+  console.log(user.fullName)
   const isUser = await User.findOne({_id:user._id});
 
   if(!isUser){
@@ -122,7 +125,7 @@ app.get("/get-user",authenticateToken,async(req,res)=>{
   }
 
   return res.json({
-    user:isUser,
+    user:{fullName:isUser.fullName, email:isUser.email,"_id":isUser._id,createdOn:isUser.createdOn},
     message:"",
   });
 });

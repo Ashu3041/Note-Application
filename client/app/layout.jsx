@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="bg-gray-600 h-14 flex items-center pl-4">
-          <NavBar />
+          
         </div>
         
         {children}

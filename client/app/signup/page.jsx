@@ -11,7 +11,7 @@ function Page() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     console.log("submit");
 
@@ -33,7 +33,23 @@ function Page() {
     }
     setError("");
 
-    // Signup API Call here...
+    // Signup API Call 
+      try {
+      const response = await axiosInstance.post("/login", {
+        email,
+        password,
+      });
+
+      if (response.data?.accessToken) {
+        localStorage.setItem("token", response.data.accessToken);
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      setError(
+        error.response?.data?.message ||
+          "An unexpected error occurred. Please try again."
+      );
+    }
   };
 
   return (
@@ -77,7 +93,7 @@ function Page() {
 
         {/* Submit Button */}
         <button
-          className="bg-black hover:bg-gray-800 text-white text-sm font-medium py-2 rounded transition-all"
+          className="bg-black hover:bg-gray-800 text-white text-sm font-medium py-2 rounded transition-all cursor-pointer"
           type="submit"
         >
           Sign Up
