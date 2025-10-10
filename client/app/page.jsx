@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Link from 'next/link'
 
 export default function Home() {
+
   return (
     <main className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
       {/* Header */}

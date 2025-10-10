@@ -3,7 +3,7 @@ import { getInitials } from '@/utils/helper'
 import React from 'react'
 
 function ProfileInfo({userInfo,onLogout}) {
-    console.log(getInitials(userInfo?.fullName))
+    // console.log(getInitials(userInfo?.fullName))
   return (
     <div className='flex items-center gap-3'>
         <div 

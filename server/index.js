@@ -117,7 +117,6 @@ app.post("/login", async (req, res) => {
 
 app.get("/get-user",authenticateToken,async(req,res)=>{
   const user = req.user;
-  console.log(user.fullName)
   const isUser = await User.findOne({_id:user._id});
 
   if(!isUser){
@@ -261,40 +260,76 @@ app.delete("/delete-note/:noteId",authenticateToken,async(req,res)=>{
 
 //UPDATE isPinned Value
 
-app.put("/update-note-pinned/:noteId",authenticateToken,async(req,res)=>{
-  const noteId=req.params.noteId;
+app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) => {
+  const noteId = req.params.noteId;
   const user = req.user;
-  const {isPinned}=req.body;
+  const { isPinned } = req.body;
 
-  try{
-    const note = await Note.findOne({_id:noteId,userId:user._id});
+  try {
+    const note = await Note.findOne({ _id: noteId, userId: user._id });
 
-    if(!note){
+    if (!note) {
       return res.status(404).json({
-        error:true,
-        message:"Note Not Found"
+        error: true,
+        message: "Note Not Found",
       });
     }
 
-    if(isPinned) note.isPinned=isPinned;
+    if (typeof isPinned !== "undefined") {
+      note.isPinned = isPinned;
+    }
 
     await note.save();
 
     return res.json({
-      success:true,
+      success: true,
       note,
-      message:"isPinned Updated Successfully"
+      message: "isPinned Updated Successfully",
+    });
+  } catch (error) {
+    console.error("Error updating note:", error);
+    return res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+    });
+  }
+});
+
+
+
+
+//Search Notes
+app.get("/search-notes",authenticateToken,async(req,res)=>{
+  const user = req.user;
+  const { query } = req.query;
+
+  if(!query){
+    return res.status(400).json({
+      error:true,
+      message:"Search Query is Required",
+    });
+  }
+  try{
+    const matchingNotes = await Note.find({
+      userId:user._id,
+      $or: [
+        { title:{$regex : new RegExp(query,"i") }},
+        {content:{ $regex: new RegExp (query,"i")}},
+      ],
+    });
+
+    return res.json({
+      success:true,
+      notes: matchingNotes,
+      message:"Notes matching the Search Query retrieved Successfully",
     });
   }catch(error){
     return res.status(500).json({
       error:true,
-      message:"Internal Server Error"
+      message:"Internal server error",
     });
   }
-
-});
-
-
+})
 
 
 // =============================

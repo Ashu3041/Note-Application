@@ -4,25 +4,34 @@ import ProfileInfo from "./ProfileInfo";
 import { useRouter } from "next/navigation";
 import SearchBar from "./SearchBar";
 
-function NavBar({ userInfo }) {
+function NavBar({ userInfo , onSearchNote ,handleClearSearch }) {
   const [searchQuery, setSearchQuery] = useState("");
 
+  const router = useRouter();  
+
+// On Handle Search
+  
   const handleSearch = () => {
-    console.log("Searching for:", searchQuery);
+    if(searchQuery){
+      onSearchNote(searchQuery);
+    }
   };
+
+//On Clear Search
 
   const onClearSearch = () => {
     setSearchQuery("");
+    handleClearSearch("");
   };
 
-  const router = useRouter();
+// On Log Out
   const onLogout = () => {
     localStorage.clear();
     router.push("/login");
   };
 
   return (
-    <div className="flex items-center justify-between w-full text-white font-medium">
+    <div className="flex items-center justify-between w-full text-white font-medium p-3 relative z-50">
       <div className="text-black pl-3 font-bold">NoteWise</div>
       <SearchBar
         value={searchQuery}
