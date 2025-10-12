@@ -1,1 +1,0 @@
-export const BASE_URL = "https://note-application-mzrd.onrender.com"

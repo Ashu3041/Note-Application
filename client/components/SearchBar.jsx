@@ -1,22 +1,52 @@
-import React from 'react';
-import { FaMagnifyingGlass } from 'react-icons/fa6';
-import { IoMdClose } from 'react-icons/io';
+import React from "react";
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import { IoMdClose } from "react-icons/io";
 
-const SearchBar = ({value,onChange,handleSearch,onClearSearch}) => {
+const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
   return (
-    <div className='w-80 flex items-center px-3 py-2 border-[1.5px] border-amber-400 rounded gap-2'>
-      <input type="text" 
-      placeholder='Search Note Here'
-      className='w-full text-black bg-transparent py[11px] outline-2 '
-      value={value} 
-      onChange={onChange}
-      
+    <div
+      className="
+    w-full sm:w-72 md:w-80 flex items-center gap-3
+    bg-white/90 border border-amber-400/70
+    rounded-xl px-3 py-2.5 shadow-sm
+    focus-within:shadow-md
+    transition-all duration-200
+  "
+    >
+      {/* Input */}
+      <input
+        type="text"
+        placeholder="Search notes..."
+        className="
+          w-full bg-transparent text-gray-800 placeholder-gray-400
+          focus:outline-none text-sm sm:text-base
+        "
+        value={value}
+        onChange={onChange}
+        onKeyDown={(e) => e.key === "Enter" && handleSearch()}
       />
-      {value && <IoMdClose className='text-gray-400 cursor-pointer  hover:text-black' onClick={onClearSearch}/>}
-      <FaMagnifyingGlass className='text-gray-400 cursor-pointer hover:text-black' onClick={handleSearch}/>
-      
-    </div>
-  )
-}
 
-export default SearchBar
+      {/* Clear Button */}
+      {value && (
+        <IoMdClose
+          className="
+            text-gray-400 hover:text-red-500
+            cursor-pointer transition-all duration-150
+          "
+          onClick={onClearSearch}
+        />
+      )}
+
+      {/* Search Icon */}
+      <FaMagnifyingGlass
+        className="
+          text-gray-500 hover:text-amber-500
+          cursor-pointer transition-all duration-150 relative z-50
+        "
+        onClick={handleSearch}
+      />
+    </div>
+  );
+};
+
+export default SearchBar;

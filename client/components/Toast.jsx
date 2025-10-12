@@ -1,36 +1,57 @@
-import React, { useEffect } from 'react'
-import { LuCheck } from 'react-icons/lu';
-import { MdDeleteOutline } from 'react-icons/md';
+import React, { useEffect } from "react";
+import { LuCheck } from "react-icons/lu";
+import { MdDeleteOutline } from "react-icons/md";
 
-const Toast = ({isShown , message , type, onClose }) => {
-      useEffect(()=>{
-      const timeoutId = setTimeout(()=>{
-        onClose();
-      }, 3000);      
-      return () =>{
-        clearTimeout(timeoutId);
-      }; 
-    },[onClose]);
+const Toast = ({ isShown, message, type, onClose }) => {
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      onClose();
+    }, 3000);
+    return () => clearTimeout(timeoutId);
+  }, [onClose]);
+
   return (
-
-    <div className={`absolute z-50 top-20 right-6 transition-all duration-400
-    ${isShown?"opacity-100":"opacity-0"}
-    `}>
-      <div className={`min-w-52 bg-white border shadow-2xl rounded-md after:w-[5px] after:h-full
-        ${type==='delete'?'after:bg-red-500':'after:bg-green-500'}
-        after:absolute after:left-0 after:top-0 after:rounded-l-lg
-        `}>
-      <div className='flex items-center gap-3 py-2 px-4'>
-        <div className={`w-10 h-10 flex items-center justify-center rounded-full 
-        ${type==='delete'?'bg-red-50':'bg-green-50'}`
-        }>
-          {type==='delete'?(<MdDeleteOutline className='text-xl text-red-500' />):(<LuCheck className='text-xl text-green-500'/>)}
+    <div
+      className={`
+        fixed z-50 top-20 right-6 transition-all duration-500 ease-in-out
+        ${isShown ? "opacity-100 translate-x-0" : "opacity-0 translate-x-5"}
+      `}
+    >
+      <div
+        className={`
+          relative flex items-center gap-3 px-4 py-3 min-w-60
+          bg-white/90 backdrop-blur-sm
+          border-l-4 rounded-xl shadow-lg
+          ${
+            type === "delete"
+              ? "border-red-500"
+              : "border-green-500"
+          }
+        `}
+      >
+        {/* Icon Container */}
+        <div
+          className={`
+            flex items-center justify-center w-10 h-10 rounded-full
+            ${
+              type === "delete"
+                ? "bg-red-100 text-red-600"
+                : "bg-green-100 text-green-600"
+            }
+          `}
+        >
+          {type === "delete" ? (
+            <MdDeleteOutline className="text-xl" />
+          ) : (
+            <LuCheck className="text-xl" />
+          )}
         </div>
-        <p className='text-sm text-slate-800'>{message}</p>
-      </div>
+
+        {/* Message */}
+        <p className="text-sm font-medium text-gray-800">{message}</p>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Toast;

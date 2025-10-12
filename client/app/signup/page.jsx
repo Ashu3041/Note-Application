@@ -6,6 +6,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
+import { motion } from "framer-motion";
 
 function Page() {
   const [name, setName] = useState("");
@@ -13,11 +14,10 @@ function Page() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("submit");
 
     if (!name) {
       setError("Please enter your name");
@@ -38,26 +38,23 @@ function Page() {
     setError("");
 
     // Signup API Call 
-      try {
+    try {
       const response = await axiosInstance.post("/create-account", {
-        fullName:name,
-        email:email,
-        password:password,
+        fullName: name,
+        email: email,
+        password: password,
       });
 
-      //Handle successful registration response
-
       if (response.data && response.data.error) {
-          setError(response.data.message)
-          return
+        setError(response.data.message);
+        return;
       }
 
-      if(response.data && response.data.accessToken){
-        localStorage.setItem("token",response.data.accessToken);
+      if (response.data && response.data.accessToken) {
+        localStorage.setItem("token", response.data.accessToken);
         router.push("/dashboard");
       }
     } catch (error) {
-      //Handle registration error
       setError(
         error.response?.data?.message ||
           "An unexpected error occurred. Please try again."
@@ -66,61 +63,75 @@ function Page() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200 px-4">
-      <form
-        className="bg-white rounded-lg shadow-md p-8 w-full max-w-sm flex flex-col gap-6"
-        onSubmit={submitHandler}
+    <main className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900 px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8"
       >
-        <h4 className="text-xl font-semibold text-gray-800 text-center">Sign Up</h4>
+        {/* Header */}
+        <h1 className="text-3xl font-bold text-center mb-2">
+          Create Your{" "}
+          <span className="text-blue-600 font-semibold">NoteWise</span> Account
+        </h1>
+        <p className="text-gray-500 text-center mb-8">
+          Sign up to start capturing and organizing your ideas.
+        </p>
 
-        {/* Name Input */}
-        <div className="relative w-full">
+        {/* Form */}
+        <form className="space-y-6" onSubmit={submitHandler}>
+          {/* Name Input */}
           <input
             type="text"
-            placeholder="Name"
+            placeholder="Full Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full border border-gray-400 rounded px-3 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border border-gray-300 rounded-full px-4 py-2.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           />
-        </div>
 
-        {/* Email Input */}
-        <div className="relative w-full">
+          {/* Email Input */}
           <input
             type="text"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full border border-gray-400 rounded px-3 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border border-gray-300 rounded-full px-4 py-2.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           />
-        </div>
 
-        {/* Password Input (with show/hide from your component) */}
-        <PasswordInput
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          {/* Password Input */}
+          <PasswordInput
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border border-gray-300 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+          />
 
-        {/* Error Message */}
-        {error && <p className="text-red-500 text-xs text-center">{error}</p>}
+          {/* Error Message */}
+          {error && (
+            <p className="text-red-500 text-sm text-center">{error}</p>
+          )}
 
-        {/* Submit Button */}
-        <button
-          className="bg-black hover:bg-gray-800 text-white text-sm font-medium py-2 rounded transition-all cursor-pointer"
-          type="submit"
-        >
-          Sign Up
-        </button>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-full transition cursor-pointer"
+          >
+            Sign Up
+          </button>
+        </form>
 
-        {/* Redirect Link */}
-        <div className="text-sm text-gray-600 text-center">
+        {/* Footer */}
+        <div className="text-center mt-6 text-sm text-gray-600">
           Already have an account?{" "}
-          <Link className="text-blue-600 hover:underline" href="/login">
+          <Link
+            href="/login"
+            className="text-blue-600 font-medium hover:underline"
+          >
             Login
           </Link>
         </div>
-      </form>
-    </div>
+      </motion.div>
+    </main>
   );
 }
 

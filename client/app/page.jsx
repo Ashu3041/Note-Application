@@ -43,11 +43,14 @@ export default function Home() {
             Stay organized, creative, and productive — all in one place.  
             Create, edit, and manage your notes from anywhere.
           </p>
+          
           <div className="space-x-4">
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full">
+            <Link href='/signup'>
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full cursor-pointer">
               Start Writing
             </Button>
-            <Button variant="outline" className="px-6 py-2 rounded-full">
+            </Link>
+            <Button variant="outline" className="px-6 py-2 rounded-full cursor-pointer">
               Learn More
             </Button>
           </div>

@@ -1,29 +1,31 @@
-import React, { useState } from 'react';
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
+"use client";
+import React, { useState } from "react";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
-function PasswordInput({ value, onChange, placeholder }) {
-  const [isShowPassword, setIsShowPassword] = useState(false);
-
-  const toggleShowPassword = () => setIsShowPassword(!isShowPassword);
+function PasswordInput({ value, onChange, placeholder = "Enter your password", name }) {
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="relative w-full">
-      {/* Password input */}
+      {/* Password Field */}
       <input
+        name={name}
         value={value}
         onChange={onChange}
-        type={isShowPassword ? 'text' : 'password'}
-        placeholder={placeholder || 'Password'}
-        className="w-full border border-gray-400 rounded px-3 py-2 pr-10 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        type={showPassword ? "text" : "password"}
+        placeholder={placeholder}
+        className="w-full border border-gray-400 rounded-4xl px-3 py-2 pr-10 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150"
       />
 
-      {/* Eye icon inside input (right side) */}
-      <div
-        className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-blue-600"
-        onClick={toggleShowPassword}
+      {/* Eye Icon */}
+      <button
+        type="button"
+        onClick={() => setShowPassword((prev) => !prev)}
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-600"
+        aria-label={showPassword ? "Hide password" : "Show password"}
       >
-        {isShowPassword ? <FaRegEye size={20} /> : <FaRegEyeSlash size={20} />}
-      </div>
+        {showPassword ? <FaRegEye size={18} /> : <FaRegEyeSlash size={18} />}
+      </button>
     </div>
   );
 }

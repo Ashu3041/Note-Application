@@ -83,7 +83,7 @@ function AddEditNotes({ noteData,type,getAllNotes,onClose,showToastMessage }) {
   }
 };
   return (
-    <div>
+    <div className="bg-red-400">
       <div className="flex flex-col gap-2">
         <div className="flex flex-row justify-between">
           <label className="input-label" htmlFor="">

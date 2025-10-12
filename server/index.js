@@ -8,10 +8,10 @@ const { authenticateToken } = require("./utilities");
 
 const User = require("./models/user.model");
 const Note = require("./models/note.model");
-const config = require("./config.json");
 
 dotenv.config();
 
+const MONGO_URI = process.env.MONGO_URI; 
 const app = express();
 
 // Middleware
@@ -20,7 +20,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(cors({ origin: "*" }));
 
 // ✅ MongoDB Connection
-mongoose.connect(config.connectionString)
+mongoose.connect(MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 

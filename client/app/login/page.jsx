@@ -6,6 +6,7 @@ import { validateEmail } from "@/utils/helper";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 function Page() {
   const [email, setEmail] = useState("");
@@ -28,25 +29,17 @@ function Page() {
 
     setError("");
 
-
-    //LOG IN API CALL
-
-
     try {
       const response = await axiosInstance.post("/login", {
         email,
         password,
       });
 
-      //Handle successful login response
-
       if (response.data?.accessToken) {
         localStorage.setItem("token", response.data.accessToken);
         router.push("/dashboard");
       }
     } catch (error) {
-
-      //Handle login error
       setError(
         error.response?.data?.message ||
           "An unexpected error occurred. Please try again."
@@ -55,40 +48,64 @@ function Page() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-200 gap-8">
-      <form
-        className="bg-white h-100 w-80 flex flex-col items-center justify-center gap-12"
-        onSubmit={loginHandler}
+    <main className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900 px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8"
       >
-        <h4>Login</h4>
-        <div className="flex flex-col gap-4 items-center justify-center">
-          <input
-            type="text"
-            className="flex items-center bg-transparent border-[1.5px] border-gray-400 rounded px-7.5 py-2.5 gap-2"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Passwordinput
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
-        </div>
-        <button
-          className="bg-black text-white text-sm pl-4 pt-1.5 pb-1.5 pr-4 rounded cursor-pointer"
-          type="submit"
-        >
-          Login
-        </button>
-        <div>
+        {/* Header */}
+        <h1 className="text-3xl font-bold text-center mb-2">
+          Welcome Back to{" "}
+          <span className="text-blue-600 font-semibold">NoteWise</span>
+        </h1>
+        <p className="text-gray-500 text-center mb-8">
+          Log in to access your notes anytime, anywhere.
+        </p>
+
+        {/* Form */}
+        <form className="space-y-6" onSubmit={loginHandler}>
+          <div className="flex flex-col gap-4">
+            <input
+              type="text"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full border border-gray-300 rounded-full px-4 py-2.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            />
+
+            <Passwordinput
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full border border-gray-300 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            />
+
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-full transition cursor-pointer"
+          >
+            Login
+          </button>
+        </form>
+
+        {/* Footer */}
+        <div className="text-center mt-6 text-sm text-gray-600">
           Not registered yet?{" "}
-          <Link href="/signup" className="text-blue-600 underline">
-            Create an Account
+          <Link
+            href="/signup"
+            className="text-blue-600 font-medium hover:underline"
+          >
+            Create an account
           </Link>
         </div>
-      </form>
-    </div>
+      </motion.div>
+    </main>
   );
 }
 

@@ -31,8 +31,9 @@ function NavBar({ userInfo , onSearchNote ,handleClearSearch }) {
   };
 
   return (
-    <div className="flex items-center justify-between w-full text-white font-medium p-3 relative z-50">
-      <div className="text-black pl-3 font-bold">NoteWise</div>
+    <div className="relative z-50">
+      <div className="flex flex-wrap items-center justify-between w-full text-white font-medium p-3 gap-4">
+      <div className="text-black pl-3 font-bold">Note<span className="text-blue-600">Wise</span></div>
       <SearchBar
         value={searchQuery}
         onChange={({ target }) => setSearchQuery(target.value)}
@@ -40,6 +41,7 @@ function NavBar({ userInfo , onSearchNote ,handleClearSearch }) {
         onClearSearch={onClearSearch}
       />
       <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+    </div>
     </div>
   );
 }
