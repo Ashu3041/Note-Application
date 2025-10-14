@@ -41,7 +41,7 @@ const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
       <FaMagnifyingGlass
         className="
           text-gray-500 hover:text-amber-500
-          cursor-pointer transition-all duration-150 relative z-50
+          cursor-pointer transition-all duration-150 relative 
         "
         onClick={handleSearch}
       />

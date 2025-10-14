@@ -32,7 +32,7 @@ function ProfileInfo({ userInfo, onLogout }) {
           className="
             text-sm text-red-600 hover:text-red-700 
             underline underline-offset-2 
-            transition-all duration-150 w-fit
+            transition-all duration-150 w-fit z-50
           "
           onClick={onLogout}
         >

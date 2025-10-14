@@ -19,7 +19,7 @@ const NoteCard = ({
       {/* 📌 Pin Icon */}
       <button
         onClick={onPinNote}
-        className="absolute top-3 right-3 text-xl text-gray-400 hover:text-blue-600 transition-colors"
+        className="absolute top-3 right-3 text-xl text-gray-400 hover:text-blue-600 transition-colors z-40"
         aria-label={isPinned ? "Unpin note" : "Pin note"}
       >
         <MdOutlinePushPin

@@ -83,7 +83,7 @@ function AddEditNotes({ noteData,type,getAllNotes,onClose,showToastMessage }) {
   }
 };
   return (
-    <div className="bg-red-400">
+    <div className="">
       <div className="flex flex-col gap-2">
         <div className="flex flex-row justify-between">
           <label className="input-label" htmlFor="">
@@ -108,7 +108,7 @@ function AddEditNotes({ noteData,type,getAllNotes,onClose,showToastMessage }) {
         </label>
         <textarea
           className="text-slate-950 outline-none h-40 w-full rounded-2xl border-2"
-          placeholder="Write the Note..."
+          placeholder=" Write the Note..."
           rows={10}
           value={content}
           onChange={({ target }) => setContent(target.value)}
